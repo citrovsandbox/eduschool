@@ -1,0 +1,31 @@
+{
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "eject": "expo eject"
+  },
+  "dependencies": {
+    "@react-native-community/slider": "^1.0.2",
+    "axios": "^0.18.0",
+    "expo": "^32.0.0",
+    "react": "16.5.0",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
+    "react-native-card-stack-swiper": "^1.1.0",
+    "react-native-chart-kit": "^2.2.1",
+    "react-native-color-matrix-image-filters": "^5.1.4",
+    "react-native-datepicker": "^1.7.2",
+    "react-native-dialog": "^5.5.0",
+    "react-native-elements": "^1.1.0",
+    "react-native-slider": "^0.11.0",
+    "react-native-view-overflow": "0.0.4",
+    "react-navigation": "^3.3.0",
+    "react-redux": "^6.0.1",
+    "redux": "^4.0.1"
+  },
+  "devDependencies": {
+    "babel-preset-expo": "^5.0.0"
+  },
+  "private": true
+}

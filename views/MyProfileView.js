@@ -4,6 +4,7 @@ import Dialog from "react-native-dialog";
 import { Entypo, MaterialIcons } from '@expo/vector-icons';
 import Theme from '../theme/MainTheme';
 import { connect } from 'react-redux';
+import Hermes from '../http/Hermes';
 
 class MyProfileView extends React.Component {
     constructor(props) {
@@ -13,6 +14,8 @@ class MyProfileView extends React.Component {
         this.onSubmitNewPasswordPress = this.onSubmitNewPasswordPress.bind(this);
         this.onCancelDialogPress = this.onCancelDialogPress.bind(this);
         this.state = {
+            old:'',
+            newPass:'',
             dialogVisible:false
         };
     }
@@ -20,7 +23,15 @@ class MyProfileView extends React.Component {
         this.setState({dialogVisible:true});
     }
     onSubmitNewPasswordPress () {
-        this.setState({dialogVisible:false});
+        let sOldPass = this.state.old;
+        let sNewPass = this.state.new;
+        let sUserId = this.props.userData.id;
+
+        Hermes.post('/changePassword', {old:sOldPass, new:sNewPass, userId:sUserId}).then((res) => {
+            console.log("Contenu de la réponse");
+            console.log(res);
+            this._handleRes(res);
+        });
     }
     onDeleteAccountPress () {
         Alert.alert(
@@ -29,7 +40,6 @@ class MyProfileView extends React.Component {
             [
               {text: 'Annuler', onPress: () => {return null}},
               {text: 'Confirmer', onPress: () => {
-                // AsyncStorage.clear();
                 props.navigation.navigate('EntryPoint')
               }},
             ],
@@ -39,14 +49,22 @@ class MyProfileView extends React.Component {
     onCancelDialogPress () {
         this.setState({dialogVisible:false});
     }
+    _handleRes = (res) => {
+        let code = res.code;
+        let sMessage = res.details;
+        switch(code) {
+            case 200:
+            this.setState({dialogVisible:false});
+            Alert.alert('Mot de passe changé', sMessage,[{text: 'Fermer', onPress: () => {return null}},],{cancelable:false});
+            break;
+            default:
+            Alert.alert('Hum...',sMessage,[{text: 'Fermer', onPress: () => {return null}},],{cancelable:false});
+        }
+    }
     render() {
         return (
         <View style={styles.viewContainer}>
                 <View style={styles.profilePicContainer}>
-                    {/* <Image
-                    source={require('../assets/flat/flat_girl.jpg')}
-                    style={styles.persona}
-                    /> */}
                     <MaterialIcons name="book" size={60} color="white" />
 
                     <Text style={styles.welcomeText}>@{this.props.userData.pseudo}</Text>
@@ -75,11 +93,11 @@ class MyProfileView extends React.Component {
                 <Dialog.Input 
                 placeholder="Mot de passe actuel" 
                 wrapperStyle={{padding:5}}
-                onChangeText={ (forgotEmail) => this.setState({forgotEmail:forgotEmail}) }/>
+                onChangeText={ (old) => this.setState({old:old}) }/>
                 <Dialog.Input 
                 placeholder="Nouveau mot de passe" 
                 wrapperStyle={{padding:5}}
-                onChangeText={(forgotCode) => this.setState({forgotCode:forgotCode})}/>
+                onChangeText={(newPass) => this.setState({new:newPass})}/>
                 <Dialog.Button label="Annuler" onPress={this.onCancelDialogPress} />
                 <Dialog.Button label="Envoyer" onPress={this.onSubmitNewPasswordPress} />
                 </Dialog.Container>

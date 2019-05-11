@@ -14,7 +14,7 @@ export default class RegisterView extends React.Component {
             lastName:"",
             email:"",
             password:"",
-            code:"",
+            pseudo:"",
             isLoading:false,
             conTextDisplay:'flex'
         };
@@ -25,13 +25,13 @@ export default class RegisterView extends React.Component {
         let sLastName = this.state.lastName;
         let sEmail = this.state.email;
         let sPassword = this.state.password;
-        let sCode = this.state.code;
+        let sPseudo = this.state.pseudo;
         let oData = {
             firstName:sFirstName,
             lastName:sLastName,
             email:sEmail,
-            password:sPassword,
-            code:sCode
+            pass:sPassword,
+            pseudo:sPseudo
         };
         Hermes.post('/register', oData).then((res) => {
             this._handleRes(res);
@@ -40,16 +40,10 @@ export default class RegisterView extends React.Component {
     }
     _handleRes (res) {
         let code = res.code;
-        let sMessage = res.message;
+        let sMessage = res.details;
         switch(code) {
             case 200:
             Alert.alert('Félicitations!',sMessage,[{text: 'Fermer', onPress: () => { this.props.navigation.navigate("EntryView")}},],{cancelable:false});
-            break;
-            case 403:
-            Alert.alert('Hum...',sMessage,[{text: 'Fermer', onPress: () => {return null}},],{cancelable:false});
-            break;
-            case 500:
-            Alert.alert('Hum...',sMessage,[{text: 'Fermer', onPress: () => {return null}},],{cancelable:false});
             break;
             default:
             Alert.alert('Hum...',sMessage,[{text: 'Fermer', onPress: () => {return null}},],{cancelable:false});
@@ -85,6 +79,14 @@ export default class RegisterView extends React.Component {
                         <View style={styles.formRow1}>
                             <TextInput 
                             style={styles.formInput1}
+                            placeholder="Pseudo"
+                            autoComplete="pseudo"
+                            onChangeText={(pseudo) => this.setState({pseudo:pseudo})}
+                            />
+                        </View>
+                        <View style={styles.formRow1}>
+                            <TextInput 
+                            style={styles.formInput1}
                             placeholder="Adresse e-mail"
                             autoComplete="email"
                             onChangeText={(email) => this.setState({email:email})}
@@ -97,14 +99,6 @@ export default class RegisterView extends React.Component {
                             autoComplete="password"
                             secureTextEntry={true}
                             onChangeText={(pass) => this.setState({password:pass})}
-                            />
-                        </View>
-                        <View style={styles.formRow1}>
-                            <TextInput 
-                            style={[styles.formInput1, {backgroundColor:'transparent', color:Theme.alternativeColor, borderWidth:0.5, borderColor:Theme.alternativeColor}]}
-                            placeholder="Code entreprise"
-                            placeholderTextColor={Theme.alternativeColor}
-                            onChangeText={(code) => this.setState({code:code})}
                             />
                         </View>
                         <View style={styles.formRow1}>

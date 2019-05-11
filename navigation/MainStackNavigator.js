@@ -4,7 +4,7 @@ import DrawerAppNavigator from './DrawerAppNavigator';
 import EntryStackNavigator from './stacks/EntryViewStackNavigator';
 
 import AuditView from '../views/AuditView';
-import CertificationTinderView from '../views/CertificationTinderView';
+import TinderView from '../views/TinderView';
 
 const MainStackNavigator = createStackNavigator({
     EntryPoint:{
@@ -30,11 +30,11 @@ const MainStackNavigator = createStackNavigator({
         } 
     },
     TinderLikeView:{
-        screen: CertificationTinderView,
+        screen: TinderView,
         navigationOptions:({ navigation }) => {
-            var sRouteTitle = navigation.state.params.auditTitle;
+            // var sRouteTitle = navigation.state.params.auditTitle;
             return ({
-                headerTitle:'Grille '  + sRouteTitle
+                headerTitle:'Test en cours'
             })
         } 
     }

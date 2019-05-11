@@ -8,19 +8,14 @@ import Theme from '../theme/MainTheme';
 class UserTest extends React.Component {
     constructor(props) {
         super(props);
-        this.onMessagePreviewPress = this.onMessagePreviewPress.bind(this);
         this._bg = this._bg.bind(this);
     }
     /**
      * Lorque l'utilisateur clique sur la photo d'un utilisateur
      * Permet de naviguer sur la page de son profil
      */
-    onMessagePreviewPress () {
-        // var oItemData = this.props.itemData;
-        // this.props.navigation.navigate("AuditView", {
-        //     auditTitle:oItemData.certificationTitle,
-        //     uuidAudit:oItemData.uuidAudit
-        // });
+    onTestPress = () => {
+        this.props.navigation.navigate("TestDetail", {testData:this.props.itemData});
     }
     _bg (theme) {
         switch(theme) {
@@ -55,7 +50,7 @@ class UserTest extends React.Component {
 
         return (
             <TouchableOpacity
-            onPress={this.onMessagePreviewPress}
+            onPress={this.onTestPress}
             >
                 <View style={styles.inboxRowContainer}>
                     <View style={styles.previewZone}>

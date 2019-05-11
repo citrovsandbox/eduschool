@@ -7,7 +7,7 @@
  * MIT Licence - Victor MAHE 2019
  */
 const Hermes = {
-    _url:'http://42615b1d.ngrok.io',
+    _url:'https://eduschool-api.citrovsandbox.fr',
     _cache:{},
     _isDebugMode:false,
     /**

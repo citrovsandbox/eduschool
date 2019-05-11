@@ -40,10 +40,9 @@ class ListDashboard extends React.Component {
     };
     this.props.dispatch(action);
   }
-  _keyExtractor = (item, index) => String(item.id);
+  _keyExtractor = (item) => String(item.id);
 
   render() {
-    // const iImgWidth = Dimensions.get('window').width * 0.7;
     const aTests = this.props.userData.tests;
     return (
       <View style={styles.viewContainer}>

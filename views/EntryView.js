@@ -56,13 +56,9 @@ class EntryView extends React.Component {
             pass:sPassword
         };
         Hermes.post('/login', oData).then((loginResponse) => {
-            Hermes.get('/course').then(courseResponse => {
-                Hermes.get('/ranking').then(rankingResponse => {
-                    this._updateStore(loginResponse.data, courseResponse.data, rankingResponse.data);
-                    this._handleRes(loginResponse);
-                    this._setLoadingMode(false);
-                });
-            });
+            this._updateStore(loginResponse.data);
+            this._handleRes(loginResponse);
+            this._setLoadingMode(false);
         }).catch((err) => {console.error(err);this._setLoadingMode(false)});
     }
     _setLoadingMode (bool) {
@@ -125,31 +121,55 @@ class EntryView extends React.Component {
      * @param {Object} res La réponse provenant du serveur
      * @return {void}
      */
-    _updateStore (userData, courseData, rankingData) {
+    _updateStore (userData) {
         // Enregistrement des données de l'utilisateur
         const action = {
             type:'REGISTER_USER_DATA',
             value:userData
         };
         this.props.dispatch(action);
-        // Enregistrement des cours disponibles
-        const action2 = {
+    }
+    _updateTests = (testData) => {
+        const action = {
+            type:'REGISTER_AVAILABLE_TESTS',
+            value:testData
+        };
+        this.props.dispatch(action);
+    }
+    _updateCourses = (testData) => {
+        const action = {
             type:'REGISTER_AVAILABLE_COURSES',
-            value:courseData
+            value:testData
         };
-        this.props.dispatch(action2);
-
-        const action3 = {
+        this.props.dispatch(action);
+    }
+    _updateRanking = (testData) => {
+        const action = {
             type:'REGISTER_RANKING',
-            value:rankingData
+            value:testData
         };
-        this.props.dispatch(action3);
+        this.props.dispatch(action);
     }
     /**
      * @hook
      * Fonction standard. Cycle de vie.
      * @return {void}
      */
+    componentDidMount () {
+        // Ici on va récupérer les tests qui nous seront utiles pour màj l'intérieur de l'appli
+        Hermes.get('/getTests').then((testsRes) => {
+            console.log(testsRes);
+            this._updateTests(testsRes.data);
+        });
+
+        Hermes.get('/course').then(courseResponse => {
+            this._updateCourses(courseResponse.data);
+        });
+
+        Hermes.get('/ranking').then(rankingResponse => {
+            this._updateRanking(rankingResponse.data);
+        });
+    }
     render() {
         return (
             <View style={styles.viewContainer}>
@@ -204,12 +224,8 @@ class EntryView extends React.Component {
                     placeholder="Adresse email" 
                     wrapperStyle={{padding:10}}
                     onChangeText={ (forgotEmail) => this.setState({forgotEmail:forgotEmail}) }/>
-                    <Dialog.Input 
-                    placeholder="Code entreprise" 
-                    wrapperStyle={{padding:10}}
-                    onChangeText={(forgotCode) => this.setState({forgotCode:forgotCode})}/>
                     <Dialog.Button label="Annuler" onPress={this.onCancelDialogPress} />
-                    <Dialog.Button label="Envoyer" onPress={this.onSendRecovedPasswordPress} />
+                    <Dialog.Button label="Réinitialiser" onPress={this.onSendRecovedPasswordPress} />
                 </Dialog.Container>
             </View>
         );
